@@ -27,6 +27,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using MetroFramework.Controls;
 using MetroFramework.Interfaces;
+using System.Reflection;
 
 namespace MetroFramework.Components
 {
@@ -144,6 +145,31 @@ namespace MetroFramework.Components
             if (owner is IMetroForm)
             {
                 clonedManager.Owner = owner;
+                ((IMetroForm)owner).StyleManager = clonedManager;
+
+                Type parentForm = owner.GetType();
+                FieldInfo fieldInfo = parentForm.GetField("components",
+                BindingFlags.Instance |
+                     BindingFlags.NonPublic);
+
+                if (fieldInfo == null) return clonedManager;
+
+                IContainer mother = (IContainer)fieldInfo.GetValue(owner);
+                if (mother == null) return clonedManager;
+
+                // Check for a helper component
+                foreach (Component obj in mother.Components)
+                {
+                    if (obj is IMetroComponent)
+                    {
+                        ApplyTheme((IMetroComponent)obj);
+                    }
+
+                    if (obj.GetType() == typeof(MetroContextMenu))
+                    {
+                        ApplyTheme((MetroContextMenu)obj);
+                    }
+                }
             }
 
             return clonedManager;

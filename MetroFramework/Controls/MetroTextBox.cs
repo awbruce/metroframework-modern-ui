@@ -191,6 +191,17 @@ namespace MetroFramework.Controls
         [EditorBrowsable(EditorBrowsableState.Always)]
         [DefaultValue("")]
         [Category(MetroDefaults.PropertyCategory.Appearance)]
+        [Obsolete("Use watermark")]
+        public string PromptText
+        {
+            get { return baseTextBox.WaterMark; }
+            set { baseTextBox.WaterMark = value; }
+        }
+
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DefaultValue("")]
+        [Category(MetroDefaults.PropertyCategory.Appearance)]
         public string WaterMark
         {
             get { return baseTextBox.WaterMark; }
@@ -460,6 +471,32 @@ namespace MetroFramework.Controls
             get { return baseTextBox.ScrollBars; }
             set { baseTextBox.ScrollBars = value; }
         }
+
+        [DefaultValue(AutoCompleteMode.None)]
+        public AutoCompleteMode AutoCompleteMode
+        {
+            get { return baseTextBox.AutoCompleteMode; }
+            set { baseTextBox.AutoCompleteMode = value; }
+        }
+
+        [DefaultValue(AutoCompleteSource.None)]
+        public AutoCompleteSource AutoCompleteSource
+        {
+            get { return baseTextBox.AutoCompleteSource;}
+            set { baseTextBox.AutoCompleteSource = value; }
+        }
+
+        public AutoCompleteStringCollection AutoCompleteCustomSource
+        {
+            get { return baseTextBox.AutoCompleteCustomSource; }
+            set { baseTextBox.AutoCompleteCustomSource = value; }
+        }
+
+        public bool ShortcutsEnabled
+        {
+            get { return baseTextBox.ShortcutsEnabled; }
+            set { baseTextBox.ShortcutsEnabled = value; }
+        }
         #endregion
 
         #region Constructor
@@ -658,7 +695,7 @@ namespace MetroFramework.Controls
             if (_witherror)
             {
                 borderColor = MetroColors.Red;
-                if (this.Style == MetroColorStyle.Red) borderColor = MetroColors.Orange;                
+                if (this.Style == MetroColorStyle.Red) borderColor = MetroColors.Orange;
             }
 
             using (Pen p = new Pen(borderColor))
@@ -1239,7 +1276,7 @@ namespace MetroFramework.Controls
                     int _g = backColor.G;
                     int _b = backColor.B;
 
-                    backColor = ControlPaint.Light(backColor, float.Parse("0.25"));
+                    backColor = ControlPaint.Light(backColor, 0.25f);
                 }
                 else if (isHovered && isPressed && Enabled)
                 {
